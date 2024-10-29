@@ -16,6 +16,7 @@
     "dotenv": "^16.4.5"
   },
   "devDependencies": {
-    "@types/amqplib": "^0.10.5"
+    "@types/amqplib": "^0.10.5",
+    "nx": "20.0.6"
   }
 }

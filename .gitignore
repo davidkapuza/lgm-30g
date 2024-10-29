@@ -139,4 +139,9 @@ node_modules
 TODO
 .envrc
 generated
+.DS_Store
 
+
+
+.nx/cache
+.nx/workspace-data
