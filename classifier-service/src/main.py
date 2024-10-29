@@ -14,9 +14,6 @@ for url in urls:
         base_url = get_base_url(url)
         content = scraper.scrape_content(base_url)
         result = classifier.classify_content(content)
-
-        print(f"result: ", result)
-
         time.sleep(2)
 
     except Exception as e:

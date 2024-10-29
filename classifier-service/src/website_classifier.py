@@ -21,7 +21,6 @@ class WebsiteClassifier:
     def get_all_categories(self) -> List[str]:
         with self.db_manager.get_session() as session:
             categories = session.query(WebsiteCategory.category_name).all()
-            print(categories)
             return [category[0] for category in categories]
 
     def classify_content(self, text: str) -> Tuple[str, float]:
