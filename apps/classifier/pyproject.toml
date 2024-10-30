@@ -1,0 +1,38 @@
+[tool.coverage.run]
+branch = true
+source = [ "pymonorepo_classifier" ]
+
+[tool.coverage.report]
+exclude_lines = ['if TYPE_CHECKING:']
+show_missing = true
+
+[tool.pytest.ini_options]
+addopts = "--cov --cov-report html:'../../coverage/apps/classifier/html' --cov-report xml:'../../coverage/apps/classifier/coverage.xml' --html='../../reports/apps/classifier/unittests/html/index.html' --junitxml='../../reports/apps/classifier/unittests/junit.xml'"
+
+[tool.poetry]
+name = "pymonorepo-classifier"
+version = "1.0.0"
+description = "classifier"
+authors = [ ]
+license = 'Proprietary'
+readme = 'README.md'
+
+  [[tool.poetry.packages]]
+  include = "pymonorepo_classifier"
+
+  [tool.poetry.dependencies]
+  python = ">=3.9,<3.11"
+  torch = "^2.5.1"
+  transformers = "^4.46.1"
+
+  [tool.poetry.group.dev.dependencies]
+  autopep8 = "2.0.2"
+  flake8 = "6.0.0"
+  pytest = "7.3.1"
+  pytest-sugar = "0.9.7"
+  pytest-cov = "4.1.0"
+  pytest-html = "3.2.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -1,5 +1,29 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "defaultBase": "master",
-  "nxCloudId": "6720e1a39eea0536e162e6f3"
+  "nxCloudId": "6720e1a39eea0536e162e6f3",
+  "plugins": [
+    "@nxlv/python",
+    {
+      "plugin": "@nx/webpack/plugin",
+      "options": {
+        "buildTargetName": "build",
+        "serveTargetName": "serve",
+        "previewTargetName": "preview"
+      }
+    },
+    {
+      "plugin": "@nx/eslint/plugin",
+      "options": {
+        "targetName": "lint"
+      }
+    },
+    {
+      "plugin": "@nx/jest/plugin",
+      "options": {
+        "targetName": "test"
+      },
+      "exclude": ["apps/analytics-e2e/**/*", "apps/auth-e2e/**/*"]
+    }
+  ]
 }
