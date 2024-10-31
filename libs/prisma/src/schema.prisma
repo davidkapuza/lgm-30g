@@ -9,7 +9,55 @@ datasource db {
 }
 
 model User {
-  id    Int    @id @default(autoincrement())
-  name  String @db.VarChar(255)
-  email String @unique @db.VarChar(255)
+  user_id    Int          @id(map: "User_pkey") @default(autoincrement())
+  name       String       @db.VarChar(255)
+  email      String       @unique(map: "User_email_key") @db.VarChar(255)
+  statistics Statistics[]
+
+  @@map("users")
+}
+
+model Statistics {
+  stat_id          Int       @id @default(autoincrement())
+  user_id          Int
+  website_id       Int
+  visit_count      Int?      @default(0)
+  last_visit_time  DateTime? @db.Timestamp(6)
+  total_time_spent Int?      @default(0)
+  created_at       DateTime? @default(now()) @db.Timestamp(6)
+  updated_at       DateTime? @default(now()) @db.Timestamp(6)
+  deleted_at       DateTime? @db.Timestamp(6)
+  users            User      @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+  websites         Website  @relation(fields: [website_id], references: [website_id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("statistics")
+  @@unique([user_id, website_id])
+  @@index([user_id], map: "idx_statistics_user")
+  @@index([website_id], map: "idx_statistics_website")
+}
+
+model WebsiteCategory {
+  category_id   Int        @id @default(autoincrement())
+  category_name String     @db.VarChar(50)
+  created_at    DateTime?  @default(now()) @db.Timestamp(6)
+  updated_at    DateTime?  @default(now()) @db.Timestamp(6)
+  deleted_at    DateTime?  @db.Timestamp(6)
+  websites      Website[]
+
+  @@map("website_categories")
+  @@index([category_name], map: "idx_category_name")
+}
+
+model Website {
+  website_id         Int                 @id @default(autoincrement())
+  domain             String              @unique @db.VarChar(255)
+  category_id        Int?
+  created_at         DateTime?           @default(now()) @db.Timestamp(6)
+  updated_at         DateTime?           @default(now()) @db.Timestamp(6)
+  deleted_at         DateTime?           @db.Timestamp(6)
+  statistics         Statistics[]
+  website_categories WebsiteCategory? @relation(fields: [category_id], references: [category_id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("websites")
+  @@index([category_id], map: "idx_websites_category")
 }

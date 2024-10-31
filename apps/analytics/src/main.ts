@@ -1,20 +1,17 @@
-/**
- * This is not a production server yet!
- * This is only a minimal backend to get started.
- */
-
+import { useAuth } from '@/shared';
 import express from 'express';
 import * as path from 'path';
+import analyticsRouter from './analytics.routes';
 
 const app = express();
+const port = process.env.ANALYTICS_APP_PORT || 8001;
 
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 
-app.get('/api', (req, res) => {
-  res.send({ message: 'Welcome to analytics!' });
-});
+useAuth(app);
 
-const port = process.env.PORT || 3333;
+app.use(analyticsRouter);
+
 const server = app.listen(port, () => {
   console.log(`Listening at http://localhost:${port}/api`);
 });

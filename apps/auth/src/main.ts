@@ -1,45 +1,20 @@
+import { config, useAuth } from '@/shared';
 import express from 'express';
 import passport from 'passport';
-import session from 'express-session';
-import { config } from './config';
-import { rabbitmqService } from './lib/rabbitmq';
-import './lib/passport';
+import * as path from 'path';
+import authRouter from './auth.routes';
+import { rabbitmqService } from './libs/rabbitmq.lib';
+import { googleStrategy } from './strategies/google.strategy';
 
 const app = express();
-const port = config.port;
+const port = config.authAppPort;
 
-app.use(express.json());
+app.use('/assets', express.static(path.join(__dirname, 'assets')));
 
-app.use(
-  session({
-    secret: config.sessionSecret,
-    resave: false,
-    saveUninitialized: false,
-  })
-);
+useAuth(app);
 
-app.use(passport.initialize());
-app.use(passport.session());
-
-app.get(
-  '/auth/google',
-  passport.authenticate('google', {
-    scope: ['email', 'profile'],
-  })
-);
-
-app.get(
-  '/auth/google/callback',
-  passport.authenticate('google', {
-    scope: ['email', 'profile'],
-  }),
-  (req, res) => {
-    if (!req.user) {
-      res.status(400).json({ error: 'Authentication failed' });
-    }
-    res.status(200).json(req.user);
-  }
-);
+passport.use(googleStrategy);
+app.use(authRouter);
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
