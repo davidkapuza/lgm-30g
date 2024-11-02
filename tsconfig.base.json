@@ -16,7 +16,8 @@
     "baseUrl": ".",
     "paths": {
       "@/prisma": ["libs/prisma/src/index.ts"],
-      "@/shared": ["libs/shared/src/index.ts"]
+      "@/shared": ["libs/shared/src/index.ts"],
+      "@/data-access-analytics": ["libs/data-access-analytics/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

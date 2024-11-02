@@ -17,7 +17,7 @@ passport.use(googleStrategy);
 app.use(authRouter);
 
 app.listen(port, () => {
-  console.log(`App listening on port ${port}`);
+  console.log(`Listening at http://localhost:${port}/`);
 });
 
 (async () => {

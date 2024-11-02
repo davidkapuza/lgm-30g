@@ -6,6 +6,7 @@ import analyticsRouter from './analytics.routes';
 const app = express();
 const port = process.env.ANALYTICS_APP_PORT || 8001;
 
+app.use(express.json());
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 
 useAuth(app);
@@ -13,6 +14,6 @@ useAuth(app);
 app.use(analyticsRouter);
 
 const server = app.listen(port, () => {
-  console.log(`Listening at http://localhost:${port}/api`);
+  console.log(`Listening at http://localhost:${port}/`);
 });
 server.on('error', console.error);

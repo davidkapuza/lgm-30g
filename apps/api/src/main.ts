@@ -19,6 +19,6 @@ app.use('/assets', express.static(path.join(__dirname, 'assets')));
 
 const port = config.apiAppPort;
 const server = app.listen(port, () => {
-  console.log(`Listening at http://localhost:${port}/api`);
+  console.log(`Listening at http://localhost:${port}/`);
 });
 server.on('error', console.error);
