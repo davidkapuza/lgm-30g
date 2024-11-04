@@ -2,6 +2,7 @@ import { Channel, Connection, connect } from 'amqplib';
 import Consumer from './consumer';
 import Producer from './producer';
 import { EventEmitter } from 'events';
+import { config } from '@/shared';
 
 class RabbitMQClient {
   private static instance: RabbitMQClient;
@@ -27,7 +28,7 @@ class RabbitMQClient {
       return;
     }
     try {
-      this.connection = await connect(`amqp://localhost:5673`);
+      this.connection = await connect(config.amqpUrl);
 
       this.producerChannel = await this.connection.createChannel();
       this.consumerChannel = await this.connection.createChannel();

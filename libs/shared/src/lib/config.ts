@@ -11,6 +11,8 @@ const ConfigSchema = z.object({
   googleClientId: z.string(),
   googleClientSecret: z.string(),
   sessionSecret: z.string(),
+  amqpUrl: z.string(),
+  amqpClassifierQueue: z.string(),
 });
 
 export type Config = z.infer<typeof ConfigSchema>;
@@ -22,4 +24,6 @@ export const config = ConfigSchema.parse({
   googleClientId: process.env.GOOGLE_CLIENT_ID,
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
   sessionSecret: process.env.SESSION_SECRET,
+  amqpUrl: process.env.AMQP_URL,
+  amqpClassifierQueue: process.env.AMQP_CLASSIFIER_QUEUE,
 });

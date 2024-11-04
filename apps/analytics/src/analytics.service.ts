@@ -3,7 +3,7 @@ import { RecordWebsiteVisitBody } from '@/data-access-analytics';
 import { getBaseUrl } from './utils';
 import RabbitMQClient from './libs/rabbitmq/client';
 
-export async function getUserStatistics(userId: number): Promise<Statistics[]> {
+export async function getUserAnalytics(userId: number): Promise<Statistics[]> {
   const statistics = await prisma.statistics.findMany({
     where: {
       user_id: userId,
@@ -27,7 +27,7 @@ export async function recordWebsiteVisit(
 
   if (!website) {
     const response = await RabbitMQClient.produce({ url: data.url });
-    if (!Array.isArray(response)) throw new Error('Clasification failed');
+    if (!Array.isArray(response)) throw new Error('Classification failed');
     const [categoryName] = response;
 
     const category = await prisma.websiteCategory.findFirst({

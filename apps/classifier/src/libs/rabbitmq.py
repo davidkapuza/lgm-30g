@@ -1,18 +1,18 @@
+import os
 import pika
 from typing import Callable
+from dotenv import load_dotenv
 
 
 class RabbitMQServer:
     def __init__(
         self,
-        port: int = 5673,
-        host: str = "localhost",
-        queue_name: str = "classifier_queue",
         callback: Callable = None,
     ):
-        self.port = port
-        self.host = host
-        self.queue_name = queue_name
+        load_dotenv()
+
+        self.amqp_url = os.getenv("AMQP_URL")
+        self.queue_name = os.getenv("AMQP_CLASSIFIER_QUEUE")
         self.callback = callback
 
         self.connection = None
@@ -20,12 +20,7 @@ class RabbitMQServer:
 
     def setup(self):
         self.connection = pika.BlockingConnection(
-            pika.ConnectionParameters(
-                host=self.host,
-                port=self.port,
-                heartbeat=600,
-                blocked_connection_timeout=300,
-            )
+            parameters=pika.URLParameters(self.amqp_url)
         )
         self.channel = self.connection.channel()
 

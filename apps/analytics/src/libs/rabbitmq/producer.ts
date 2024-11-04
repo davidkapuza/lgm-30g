@@ -1,3 +1,4 @@
+import { config } from '@/shared';
 import { Channel } from 'amqplib';
 import { randomUUID } from 'crypto';
 import EventEmitter from 'events';
@@ -12,7 +13,7 @@ export default class Producer {
   async produceMessages(data: unknown) {
     const uuid = randomUUID();
     this.channel.sendToQueue(
-      'classifier_queue',
+      config.amqpClassifierQueue,
       Buffer.from(JSON.stringify(data)),
       {
         replyTo: this.replyQueueName,
