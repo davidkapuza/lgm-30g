@@ -12,7 +12,7 @@ class DatabaseManager:
     def __init__(self):
         load_dotenv()
 
-        db_url = f"{os.getenv('DATABASE_URL')}/postgres"
+        db_url = os.getenv("DATABASE_URL")
 
         self.engine = create_engine(db_url)
         self.SessionLocal = sessionmaker(

@@ -1,6 +1,7 @@
 import { prisma, Statistics } from '@/prisma';
 import { RecordWebsiteVisitBody } from '@/data-access-analytics';
 import { getBaseUrl } from './utils';
+import RabbitMQClient from './libs/rabbitmq/client';
 
 export async function getUserStatistics(userId: number): Promise<Statistics[]> {
   const statistics = await prisma.statistics.findMany({
@@ -16,14 +17,31 @@ export async function recordWebsiteVisit(
   userId: number,
   data: RecordWebsiteVisitBody
 ): Promise<Statistics> {
-  const website = await prisma.website.findUnique({
+  const baseUrl = getBaseUrl(data.url);
+
+  let website = await prisma.website.findUnique({
     where: {
-      domain: getBaseUrl(data.url),
+      domain: baseUrl,
     },
   });
 
   if (!website) {
-    // TODO request to classifier service and store new website with category in db
+    const response = await RabbitMQClient.produce({ url: data.url });
+    if (!Array.isArray(response)) throw new Error('Clasification failed');
+    const [categoryName] = response;
+
+    const category = await prisma.websiteCategory.findFirst({
+      where: {
+        category_name: categoryName,
+      },
+    });
+
+    website = await prisma.website.create({
+      data: {
+        domain: baseUrl,
+        category_id: category.category_id,
+      },
+    });
   }
 
   const statistics = await prisma.statistics.upsert({
@@ -47,5 +65,6 @@ export async function recordWebsiteVisit(
       total_time_spent: data.visitDuration,
     },
   });
+
   return statistics;
 }

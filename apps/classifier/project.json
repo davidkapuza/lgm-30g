@@ -4,6 +4,13 @@
   "projectType": "application",
   "sourceRoot": "apps/classifier/pymonorepo_classifier",
   "targets": {
+    "serve": {
+      "executor": "@nxlv/python:run-commands",
+      "options": {
+        "command": "poetry run python pymonorepo_classifier/server.py",
+        "cwd": "apps/classifier"
+      }
+    },
     "lock": {
       "executor": "@nxlv/python:run-commands",
       "options": {
